@@ -18,6 +18,7 @@ import type {
   UseMutationForAPI,
   UseConvexForAPI,
 } from "convex/react";
+import type * as getMessage from "../getMessage";
 import type * as listMessages from "../listMessages";
 import type * as sendMessage from "../sendMessage";
 
@@ -31,6 +32,7 @@ import type * as sendMessage from "../sendMessage";
  * `ConvexReactClient` to create app-specific types.
  */
 export type ConvexAPI = ApiFromModules<{
+  getMessage: typeof getMessage;
   listMessages: typeof listMessages;
   sendMessage: typeof sendMessage;
 }>;
