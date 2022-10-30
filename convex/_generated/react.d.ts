@@ -20,10 +20,11 @@ import type {
 } from "convex/react";
 import type * as addPlayer from "../addPlayer";
 import type * as getPlayers from "../getPlayers";
-import type * as getPotatoHolder from "../getPotatoHolder";
+import type * as getPotatoHolders from "../getPotatoHolders";
 import type * as passPotato from "../passPotato";
 import type * as receivesPotato from "../receivesPotato";
 import type * as removePlayer from "../removePlayer";
+import type * as removePotato from "../removePotato";
 
 /**
  * A type describing your app's public Convex API.
@@ -37,10 +38,11 @@ import type * as removePlayer from "../removePlayer";
 export type ConvexAPI = ApiFromModules<{
   addPlayer: typeof addPlayer;
   getPlayers: typeof getPlayers;
-  getPotatoHolder: typeof getPotatoHolder;
+  getPotatoHolders: typeof getPotatoHolders;
   passPotato: typeof passPotato;
   receivesPotato: typeof receivesPotato;
   removePlayer: typeof removePlayer;
+  removePotato: typeof removePotato;
 }>;
 
 /**

@@ -93,28 +93,51 @@ export default function App() {
     }, []);
 
     const [players, setPlayers] = useState([]);
-    const [potatoHolder, setPotatoHolder] = useState(null);
+    const [potatoHolders, setPotatoHolder] = useState([]);
 
     const [potatoCount, setPotatoCount] = useState(1);
     const _addPlayer = useMutation('addPlayer');
 
-    const _userReceivesPotato = useMutation('receivesPotato');
+    const _receivesPotato = useMutation('receivesPotato');
     const _getPlayers = useMutation('getPlayers');
-    const _getHolder = useMutation('getPotatoHolder');
+    const _getHolders = useMutation('getPotatoHolders');
     const _passPotato = useMutation('passPotato');
     const _removePlayer = useMutation('removePlayer');
+    const _removePotato = useMutation('removePotato');
 
     const startHotPotato = async () => {
         let time = performance.now();
 
         while (performance.now() - time < 10000) {
             if (players.length) {
-                const randomPlayer = players[Math.floor(Math.random() * players.length)];
-                if (!potatoHolder) {
-                    await _userReceivesPotato(randomPlayer._id);
-                    await getHolder();
-                } else if (potatoHolder?.id.id !== randomPlayer._id.id) {
-                    await passPotato(randomPlayer);
+                const _potatoHolders = await _getHolders();
+
+                if (_potatoHolders.length < potatoCount) {
+                    let i = _potatoHolders.length;
+
+                    while (i < potatoCount) {
+                        const randomPlayer = players[Math.floor(Math.random() * players.length)];
+                        if (
+                            _potatoHolders.findIndex(potatoHolder => potatoHolder?.id.id === randomPlayer._id.id) === -1
+                        ) {
+                            await _receivesPotato(randomPlayer._id);
+                            await getHolders();
+                            i++;
+                        }
+                    }
+                } else {
+                    let i = 0;
+
+                    while (i < potatoCount) {
+                        const randomPlayer = players[Math.floor(Math.random() * players.length)];
+                        if (
+                            _potatoHolders.findIndex(potatoHolder => potatoHolder.id.id === randomPlayer._id.id) === -1
+                        ) {
+                            await passPotato(randomPlayer);
+                            await getHolders();
+                            i++;
+                        }
+                    }
                 }
             }
         }
@@ -125,22 +148,33 @@ export default function App() {
         const _players = await _getPlayers();
         window.performance.measure('getPlayers to Now', 'getPlayers');
         setPlayers(_ => _players);
-        if (!potatoHolder) {
-            await getHolder();
+        if (!potatoHolders.length) {
+            await getHolders();
         }
     };
 
-    const getHolder = async e => {
+    const getHolders = async e => {
         window.performance.mark('getHolder');
-        const _potatoHolder = await _getHolder();
+        const _potatoHolders = await _getHolders();
         window.performance.measure('getHolder to Now', 'getHolder');
-        setPotatoHolder(_ => _potatoHolder);
+        setPotatoHolder(_ => _potatoHolders);
+        setPotatoCount(_ => _potatoHolders.length);
     };
 
     const addPotato = async e => {
         e.preventDefault();
         if (potatoCount < players.length / 2 - 1) {
             setPotatoCount(potatoCount + 1);
+            let i = 0;
+            while (i < 1) {
+                const randomPlayer = players[Math.floor(Math.random() * players.length)];
+                if (potatoHolders.findIndex(potatoHolder => potatoHolder?.id.id === randomPlayer._id.id) === -1) {
+                    await _receivesPotato(randomPlayer._id);
+                    await getPlayers();
+                    await getHolders();
+                    i++;
+                }
+            }
         }
     };
 
@@ -148,6 +182,11 @@ export default function App() {
         e.preventDefault();
         if (potatoCount > 1 && potatoCount <= players.length / 2) {
             setPotatoCount(potatoCount - 1);
+            const _potatoHolders = await _getHolders();
+            const randomPotatoHolder = _potatoHolders[Math.floor(Math.random() * _potatoHolders.length)];
+            await _removePotato(randomPotatoHolder);
+            await getPlayers();
+            await getHolders();
         }
     };
 
@@ -167,11 +206,14 @@ export default function App() {
     };
 
     const passPotato = async p => {
-        if (potatoHolder && potatoHolder?.id.id !== p._id.id) {
+        const _potatoHolders = await _getHolders();
+        const isAlreadyHolding = _potatoHolders.findIndex(potatoHolder => potatoHolder?.id.id === p._id.id) !== -1;
+        if (_potatoHolders.length && !isAlreadyHolding) {
             window.performance.mark('passPotato');
-            _passPotato(potatoHolder, p._id);
+            const randomPotatoHolder = _potatoHolders[Math.floor(Math.random() * _potatoHolders.length)];
+            await _passPotato(randomPotatoHolder, p._id);
             window.performance.measure('passPotato to Now', 'passPotato');
-            await getHolder();
+            await getHolders();
         }
     };
 
@@ -188,6 +230,8 @@ export default function App() {
                     <br />* Add another hot potato by clicking the "Add Potato" button.
                     <br />* Remove a hot potato by clicking the "Remove Potato" button.
                     <br />* Click on "Start Hot Potato" to automate the Hot Potato for 10 seconds.
+                    <br />* You are welcomed to intercept the automation by adding and removing players, adding and
+                    removing potatoes, or interrupting the potato elsewhere.
                 </div>
             </div>
             <div>
@@ -204,7 +248,12 @@ export default function App() {
                                 e.preventDefault();
                                 passPotato(p);
                             }}
-                            className={'player ' + (potatoHolder?.id.id === p._id.id ? 'potato-holder' : '')}>
+                            className={
+                                'player ' +
+                                (potatoHolders.findIndex(potatoHolder => potatoHolder?.id.id === p._id.id) !== -1
+                                    ? 'potato-holder'
+                                    : '')
+                            }>
                             Player {i + 1}
                         </div>
                     ))}
@@ -220,7 +269,7 @@ export default function App() {
                         <button onClick={addPlayer}>Add Player</button>
                     </div>
                     <div>
-                        <button onClick={getHolder}>Get Holder</button>
+                        <button onClick={getHolders}>Get Holders</button>
                     </div>
                     <div>
                         <button onClick={addPotato}>Add Potato</button>
@@ -234,14 +283,14 @@ export default function App() {
                 </div>
             </div>
             <div>
-                <div className={'heading__logs'}>Logs</div>
+                <div className={'heading__logs'}>Average latency</div>
                 <div className={'logs'}>
                     <div>
                         <div className={'logs__label'}>Get Players (Get All)</div>
                         <div>{log.current.getPlayers.toFixed(5)}ms</div>
                     </div>
                     <div>
-                        <div className={'logs__label'}>Get Holder (Get One)</div>
+                        <div className={'logs__label'}>Get Holders (Get One or a Few)</div>
                         <div>{log.current.getHolder.toFixed(5)}ms</div>
                     </div>
                     <div>

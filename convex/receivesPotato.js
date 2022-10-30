@@ -1,23 +1,19 @@
 import { mutation } from './_generated/server';
 
 export default mutation(async ({ db }, _id) => {
+    const _player = await db.get(_id);
     const player = {
         hasPotato: true,
         timestamp: Date.now(),
-        numOfTimeHeldPotato: 1,
-        totalTimeHeld: 0
+        numOfTimeHeldPotato: _player?.numOfTimeHeldPotato + 1 ?? 1,
+        totalTimeHeld: Date.now() - (_player?.timestamp ?? 0) + (_player?.totalTimeHeld ?? 0)
     };
 
-    await db.replace(_id, player);
+    await db.patch(_id, player);
 
     const holder = {
         id: _id
     };
 
-    const potatoHolder = await db.query('holder').first();
-    if (!potatoHolder) {
-        await db.insert('holder', holder);
-    } else {
-        await db.replace(potatoHolder._id, holder);
-    }
+    await db.insert('holder', holder);
 });

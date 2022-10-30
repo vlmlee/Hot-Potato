@@ -10,8 +10,7 @@ export default mutation(async ({ db }, holder, _to) => {
     };
     await db.patch(from._id, updatedFromPlayer);
 
-    const _holder = { id: _to };
-    await db.patch(holder._id, _holder);
+    await db.delete(holder._id);
 
     const to = await db.get(_to);
     const to_player = {
@@ -21,4 +20,9 @@ export default mutation(async ({ db }, holder, _to) => {
         totalTimeHeld: Date.now() - (to?.timestamp ?? 0) + (to?.totalTimeHeld ?? 0)
     };
     await db.patch(_to, to_player);
+
+    const _holder = {
+        id: _to
+    };
+    await db.insert('holder', _holder);
 });
