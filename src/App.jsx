@@ -299,7 +299,7 @@ export default function App() {
                 <div className={'heading__logs'}>Average latency</div>
                 <div className={'logs'}>
                     <div>
-                        <div className={'logs__label'}>Get Players (Get All)</div>
+                        <div className={'logs__label'}>Get Players (Query All)</div>
                         <div>{log.current.getPlayers.toFixed(5)}ms</div>
                     </div>
                     <div>
