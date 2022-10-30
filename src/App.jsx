@@ -1,12 +1,22 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useMutation, useQuery} from "../convex/_generated/react";
 
 export default function App() {
+    const userReceivesPotato = useMutation("receivesPotato");
     const players = useQuery("getPlayers") || [];
     performance.measure('getPlayers to Now', "getPlayers");
     const potatoHolder = useQuery("getPotatoHolder");
     performance.measure('getHolder to Now', 'getHolder', "getPlayers");
     const passPotato = useMutation("passPotato");
+
+    useEffect(() => {
+        async function startHotPotato() {
+            const randomId = Math.floor(Math.random() * 10);
+            await userReceivesPotato(randomId);
+        }
+
+        startHotPotato();
+    }, []);
 
     return (
         <main>
