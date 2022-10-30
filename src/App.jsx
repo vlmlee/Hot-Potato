@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useMutation } from '../convex/_generated/react';
+import { useMutation, useQuery } from '../convex/_generated/react';
 import receivesPotato from '../convex/receivesPotato';
 
 export default function App() {
@@ -95,6 +95,9 @@ export default function App() {
     const [players, setPlayers] = useState([]);
     const [potatoHolders, setPotatoHolder] = useState([]);
     const [potatoCount, setPotatoCount] = useState(1);
+
+    const queriedPlayers = useQuery('queryPlayers') || [];
+    const queriedHolders = useQuery('queryHolders') || [];
 
     const _addPlayer = useMutation('addPlayer');
     const _receivesPotato = useMutation('receivesPotato');
@@ -244,7 +247,7 @@ export default function App() {
             <div>
                 <div className={'heading'}>Players</div>
                 <div className={'player__container'}>
-                    {players.map((p, i) => (
+                    {queriedPlayers.map((p, i) => (
                         <div
                             key={`${p._id.id}`}
                             onContextMenu={e => {
@@ -257,7 +260,7 @@ export default function App() {
                             }}
                             className={
                                 'player ' +
-                                (potatoHolders.findIndex(potatoHolder => potatoHolder?.id.id === p._id.id) !== -1
+                                (queriedHolders.findIndex(potatoHolder => potatoHolder?.id.id === p._id.id) !== -1
                                     ? 'potato-holder'
                                     : '')
                             }>

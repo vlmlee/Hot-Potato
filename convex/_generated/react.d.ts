@@ -22,6 +22,8 @@ import type * as addPlayer from "../addPlayer";
 import type * as getPlayers from "../getPlayers";
 import type * as getPotatoHolders from "../getPotatoHolders";
 import type * as passPotato from "../passPotato";
+import type * as queryHolders from "../queryHolders";
+import type * as queryPlayers from "../queryPlayers";
 import type * as receivesPotato from "../receivesPotato";
 import type * as removePlayer from "../removePlayer";
 import type * as removePotato from "../removePotato";
@@ -40,6 +42,8 @@ export type ConvexAPI = ApiFromModules<{
   getPlayers: typeof getPlayers;
   getPotatoHolders: typeof getPotatoHolders;
   passPotato: typeof passPotato;
+  queryHolders: typeof queryHolders;
+  queryPlayers: typeof queryPlayers;
   receivesPotato: typeof receivesPotato;
   removePlayer: typeof removePlayer;
   removePotato: typeof removePotato;
