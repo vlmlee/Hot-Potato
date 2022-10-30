@@ -94,10 +94,9 @@ export default function App() {
 
     const [players, setPlayers] = useState([]);
     const [potatoHolders, setPotatoHolder] = useState([]);
-
     const [potatoCount, setPotatoCount] = useState(1);
-    const _addPlayer = useMutation('addPlayer');
 
+    const _addPlayer = useMutation('addPlayer');
     const _receivesPotato = useMutation('receivesPotato');
     const _getPlayers = useMutation('getPlayers');
     const _getHolders = useMutation('getPotatoHolders');
