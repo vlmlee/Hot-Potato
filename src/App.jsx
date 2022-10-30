@@ -1,7 +1,9 @@
 import {useEffect, useState} from "react";
 import {useMutation, useQuery} from "../convex/_generated/react";
+import usePerfHook from "./perf";
 
 export default function App() {
+    const perfLogs = usePerfHook();
     const userReceivesPotato = useMutation("receivesPotato");
     const players = useQuery("getPlayers") || [];
     performance.measure('getPlayers to Now', "getPlayers");
@@ -26,6 +28,9 @@ export default function App() {
                 }}
                 className={potatoHolder.player_id === p.id ? "potato-holder" : ''}
                 >Player {p.id}</div>))}
+            </div>
+            <div>
+                {perfLogs}
             </div>
         </main>
     );
