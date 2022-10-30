@@ -9,7 +9,9 @@ export default function App() {
         addPlayer: 0,
         removePlayer: 0
     });
+
     let init = false;
+
     useEffect(() => {
         const obs = new PerformanceObserver(items => {
             const _getPlayersEntries = items.getEntriesByName('getPlayers to Now');
@@ -75,7 +77,6 @@ export default function App() {
             }
 
             init = true;
-            window.performance.clearMarks();
         });
         obs.observe({ type: 'measure' });
 
@@ -84,18 +85,15 @@ export default function App() {
         };
     }, []);
 
-    window.performance.mark('getPlayers');
-    const players = useQuery('getPlayers') || [];
-    window.performance.measure('getPlayers to Now', 'getPlayers');
+    const [players, setPlayers] = useState([]);
+    const [potatoHolder, setPotatoHolder] = useState(null);
 
-    window.performance.mark('getHolder');
-    const potatoHolder = useQuery('getPotatoHolder');
-    window.performance.measure('getHolder to Now', 'getHolder');
-
-    const [potatoCount, setPotatoCount] = useState(0);
+    const [potatoCount, setPotatoCount] = useState(1);
     const _addPlayer = useMutation('addPlayer');
 
     const userReceivesPotato = useMutation('receivesPotato');
+    const _getPlayers = useMutation('getPlayers');
+    const _getHolder = useMutation('getPotatoHolder');
     const _passPotato = useMutation('passPotato');
     const _removePlayer = useMutation('removePlayer');
 
@@ -103,12 +101,37 @@ export default function App() {
         if (players.length) {
             const randomPlayer = players[Math.floor(Math.random() * players.length)];
             await userReceivesPotato(randomPlayer._id);
+            await getHolder();
         }
+    };
+
+    const getPlayers = async e => {
+        window.performance.mark('getPlayers');
+        const _players = await _getPlayers();
+        window.performance.measure('getPlayers to Now', 'getPlayers');
+        setPlayers(_players);
+    };
+
+    const getHolder = async e => {
+        window.performance.mark('getHolder');
+        const _potatoHolder = await _getHolder();
+        window.performance.measure('getHolder to Now', 'getHolder');
+        setPotatoHolder(_potatoHolder);
+        await getPlayers(e);
     };
 
     const addPotato = async e => {
         e.preventDefault();
-        setPotatoCount(potatoCount + 1);
+        if (potatoCount < players.length / 2 - 1) {
+            setPotatoCount(potatoCount + 1);
+        }
+    };
+
+    const removePotato = async e => {
+        e.preventDefault();
+        if (potatoCount > 1 && potatoCount <= players.length / 2) {
+            setPotatoCount(potatoCount - 1);
+        }
     };
 
     const addPlayer = async e => {
@@ -116,73 +139,105 @@ export default function App() {
         window.performance.mark('addPlayer');
         await _addPlayer();
         window.performance.measure('addPlayer to Now', 'addPlayer');
+        await getPlayers(e);
     };
 
-    const passPotato = async p => {
+    const passPotato = async (e, p) => {
         if (potatoHolder && potatoHolder?.id.id !== p._id.id) {
             window.performance.mark('passPotato');
             _passPotato(potatoHolder, p._id);
             window.performance.measure('passPotato to Now', 'passPotato');
+            await getHolder(e);
         }
     };
 
-    const removePlayer = async p => {
+    const removePlayer = async (e, p) => {
         window.performance.mark('removePlayer');
         await _removePlayer(p._id);
         window.performance.measure('removePlayer to Now', 'removePlayer');
+        await getPlayers(e);
     };
 
     return (
         <main>
-            <div>Number of hot potatoes: {potatoCount}</div>
-            <div>
-                {players.map((p, i) => (
-                    <div
-                        key={`${p._id.id}`}
-                        onContextMenu={e => {
-                            e.preventDefault();
-                            removePlayer(p);
-                        }}
-                        onClick={e => {
-                            e.preventDefault();
-                            passPotato(p);
-                        }}
-                        className={potatoHolder?.id.id === p._id.id ? 'potato-holder' : ''}>
-                        Player {p._id.id}
-                    </div>
-                ))}
+            <div className={'instructions'}>
+                <div className={'instructions__number'}>Number of hot potatoes: {potatoCount}</div>
+                <div className={'instructions__keys'}>
+                    <br />
+                    Instructions:
+                    <br />* Left-click on a player to pass the hot potato.
+                    <br />* Right-click to remove a player.
+                    <br />* Add a player by clicking the "Add Player" button.
+                    <br />* Add another hot potato by clicking the "Add Potato" button.
+                    <br />* Remove a hot potato by clicking the "Remove Potato" button.
+                    <br />* Click on "Start Hot Potato" to automate the Hot Potato.
+                </div>
             </div>
             <div>
-                <button onClick={addPlayer}>Add Player</button>
+                <div className={'heading'}>Players</div>
+                <div className={'player__container'}>
+                    {players.map((p, i) => (
+                        <div
+                            key={`${p._id.id}`}
+                            onContextMenu={e => {
+                                e.preventDefault();
+                                removePlayer(e, p);
+                            }}
+                            onClick={e => {
+                                e.preventDefault();
+                                passPotato(e, p);
+                            }}
+                            className={'player ' + (potatoHolder?.id.id === p._id.id ? 'potato-holder' : '')}>
+                            Player {i + 1}
+                        </div>
+                    ))}
+                </div>
             </div>
             <div>
-                <button onClick={addPotato}>Add Potato</button>
+                <div className={'heading'}>Actions</div>
+                <div className={'buttons__container'}>
+                    <div>
+                        <button onClick={getPlayers}>Get Players</button>
+                    </div>
+                    <div>
+                        <button onClick={addPlayer}>Add Player</button>
+                    </div>
+                    <div>
+                        <button onClick={getHolder}>Get Holder</button>
+                    </div>
+                    <div>
+                        <button onClick={addPotato}>Add Potato</button>
+                    </div>
+                    <div>
+                        <button onClick={removePotato}>Remove Potato</button>
+                    </div>
+                    <div>
+                        <button onClick={startHotPotato}>Start Hot Potato</button>
+                    </div>
+                </div>
             </div>
             <div>
-                <button onClick={startHotPotato}>Start Hot Potato</button>
-            </div>
-            <div>
-                Logs
-                <div>
+                <div className={'heading__logs'}>Logs</div>
+                <div className={'logs'}>
                     <div>
-                        <div>Get Players (Collect)</div>
-                        <div>{log.current.getPlayers}ms</div>
+                        <div className={'logs__label'}>Get Players (Collect)</div>
+                        <div>{log.current.getPlayers.toFixed(5)}ms</div>
                     </div>
                     <div>
-                        <div>Get Holder (Get)</div>
-                        <div>{log.current.getHolder}ms</div>
+                        <div className={'logs__label'}>Get Holder (Get)</div>
+                        <div>{log.current.getHolder.toFixed(5)}ms</div>
                     </div>
                     <div>
-                        <div>Pass Potato (Patch x2)</div>
-                        <div>{log.current.passPotato}ms</div>
+                        <div className={'logs__label'}>Pass Potato (Patch x2)</div>
+                        <div>{log.current.passPotato.toFixed(5)}ms</div>
                     </div>
                     <div>
-                        <div>Add Player (Insert)</div>
-                        <div>{log.current.addPlayer}ms</div>
+                        <div className={'logs__label'}>Add Player (Insert)</div>
+                        <div>{log.current.addPlayer.toFixed(5)}ms</div>
                     </div>
                     <div>
-                        <div>Remove Player (Delete)</div>
-                        <div>{log.current.removePlayer}ms</div>
+                        <div className={'logs__label'}>Remove Player (Delete)</div>
+                        <div>{log.current.removePlayer.toFixed(5)}ms</div>
                     </div>
                 </div>
             </div>

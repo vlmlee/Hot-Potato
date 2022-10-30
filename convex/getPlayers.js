@@ -1,5 +1,5 @@
-import { query } from './_generated/server';
+import { mutation, query } from './_generated/server';
 
-export default query(async ({ db }) => {
+export default mutation(async ({ db }) => {
     return await db.query('players').collect();
 });
