@@ -100,6 +100,7 @@ li span:nth-child(3) {
 
 .instructions__keys {
     font-family: "CaskaydiaCove NF Mono";
+    /*line-height: 28px;*/
 }
 
 .instructions__number {
@@ -128,10 +129,11 @@ li span:nth-child(3) {
     border: 1px solid #eee;
     padding: 10px;
     border-radius: 40px;
-    background: linear-gradient(45deg, #2563eb, #6d28d9);
+    background: #2563eb;
     color: white;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.25s background ease-in-out;
 }
 
 .player:active {
@@ -162,4 +164,10 @@ li span:nth-child(3) {
     display: flex;
     flex-direction: column;
     gap: 15px;
+}
+
+.buttons__container button.red {
+    background:  #dc2626;
+    transition: 0.25s background ease-in-out;
+    cursor: not-allowed;
 }

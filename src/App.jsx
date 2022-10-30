@@ -112,7 +112,11 @@ export default function App() {
             if (players.length) {
                 const _potatoHolders = await _getHolders();
 
-                if (_potatoHolders.length < potatoCount) {
+                if (!_potatoHolders.length) {
+                    const randomPlayer = players[Math.floor(Math.random() * players.length)];
+                    await _receivesPotato(randomPlayer._id);
+                    await getHolders();
+                } else if (_potatoHolders.length < potatoCount) {
                     let i = _potatoHolders.length;
 
                     while (i < potatoCount) {
@@ -164,7 +168,7 @@ export default function App() {
     const addPotato = async e => {
         e.preventDefault();
         if (potatoCount < players.length / 2 - 1) {
-            setPotatoCount(potatoCount + 1);
+            setPotatoCount(prev => prev + 1);
             let i = 0;
             while (i < 1) {
                 const randomPlayer = players[Math.floor(Math.random() * players.length)];
@@ -180,8 +184,8 @@ export default function App() {
 
     const removePotato = async e => {
         e.preventDefault();
-        if (potatoCount > 1 && potatoCount <= players.length / 2) {
-            setPotatoCount(potatoCount - 1);
+        if (potatoCount > 1 && potatoCount <= players.length) {
+            setPotatoCount(prev => prev - 1);
             const _potatoHolders = await _getHolders();
             const randomPotatoHolder = _potatoHolders[Math.floor(Math.random() * _potatoHolders.length)];
             await _removePotato(randomPotatoHolder);
@@ -196,6 +200,7 @@ export default function App() {
         await _addPlayer();
         window.performance.measure('addPlayer to Now', 'addPlayer');
         await getPlayers();
+        await getHolders();
     };
 
     const removePlayer = async p => {
@@ -203,6 +208,7 @@ export default function App() {
         await _removePlayer(p._id);
         window.performance.measure('removePlayer to Now', 'removePlayer');
         await getPlayers();
+        await getHolders();
     };
 
     const passPotato = async p => {
@@ -228,7 +234,9 @@ export default function App() {
                     <br />* Right-click to remove a player.
                     <br />* Add a player by clicking the "Add Player" button.
                     <br />* Add another hot potato by clicking the "Add Potato" button.
+                    <br />* There can only be at most (n/2)-1 potatoes.
                     <br />* Remove a hot potato by clicking the "Remove Potato" button.
+                    <br />* If there are 0 potatoes, you cannot start the automated Hot Potato.
                     <br />* Click on "Start Hot Potato" to automate the Hot Potato for 10 seconds.
                     <br />* You are welcomed to intercept the automation by adding and removing players, adding and
                     removing potatoes, or interrupting the potato elsewhere.
@@ -278,7 +286,12 @@ export default function App() {
                         <button onClick={removePotato}>Remove Potato</button>
                     </div>
                     <div>
-                        <button onClick={startHotPotato}>Start Hot Potato</button>
+                        <button
+                            disabled={potatoCount === 0}
+                            className={potatoCount === 0 ? 'red' : ''}
+                            onClick={potatoCount !== 0 ? startHotPotato : null}>
+                            Start Hot Potato
+                        </button>
                     </div>
                 </div>
             </div>
