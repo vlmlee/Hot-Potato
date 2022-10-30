@@ -22,7 +22,8 @@ import type * as addPlayer from "../addPlayer";
 import type * as getPlayers from "../getPlayers";
 import type * as getPotatoHolder from "../getPotatoHolder";
 import type * as passPotato from "../passPotato";
-import type * as recievesPotato from "../recievesPotato";
+import type * as receivesPotato from "../receivesPotato";
+import type * as removePlayer from "../removePlayer";
 
 /**
  * A type describing your app's public Convex API.
@@ -38,7 +39,8 @@ export type ConvexAPI = ApiFromModules<{
   getPlayers: typeof getPlayers;
   getPotatoHolder: typeof getPotatoHolder;
   passPotato: typeof passPotato;
-  recievesPotato: typeof recievesPotato;
+  receivesPotato: typeof receivesPotato;
+  removePlayer: typeof removePlayer;
 }>;
 
 /**

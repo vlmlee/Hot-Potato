@@ -8,6 +8,6 @@ export default defineSchema({
         totalTimeHeld: s.number()
     }),
     holder: defineTable({
-        player_id: s.id('players')
+        id: s.id('players')
     })
 });
