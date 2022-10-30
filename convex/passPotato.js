@@ -1,7 +1,7 @@
 import { mutation } from './_generated/server';
 
 export default mutation(async ({ db }, _from, _to) => {
-    window.performance.mark('passPotato');
+    performance.mark('passPotato');
     const from = await db
         .query('player')
         .filter(q => q.eq(q.field('id'), _from))
@@ -28,5 +28,5 @@ export default mutation(async ({ db }, _from, _to) => {
         totalTimeHeld: Date.now() - (to?.timestamp ?? 0) + (to?.totalTimeHeld ?? 0)
     };
     await db.patch(_to, to_player);
-    window.performance.measure('passPotato to Now', 'passPotato');
+    performance.measure('passPotato to Now', 'passPotato');
 });

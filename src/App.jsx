@@ -6,9 +6,13 @@ export default function App() {
     const perfLogs = usePerfHook();
     const userReceivesPotato = useMutation('receivesPotato');
     const players = useQuery('getPlayers') || [];
-    performance.measure('getPlayers to Now', 'getPlayers');
+    if (window.performance.getEntriesByName('getPlayers').length) {
+        window.performance.measure('getPlayers to Now', 'getPlayers');
+    }
     const potatoHolder = useQuery('getPotatoHolder');
-    performance.measure('getHolder to Now', 'getHolder', 'getPlayers');
+    if (window.performance.getEntriesByName('getPlayers').length) {
+        window.performance.measure('getHolder to Now', 'getHolder', 'getPlayers');
+    }
     const passPotato = useMutation('passPotato');
 
     useEffect(() => {
