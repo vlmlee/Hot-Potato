@@ -18,6 +18,7 @@ import type {
   UseMutationForAPI,
   UseConvexForAPI,
 } from "convex/react";
+import type * as addPlayer from "../addPlayer";
 import type * as getPlayers from "../getPlayers";
 import type * as getPotatoHolder from "../getPotatoHolder";
 import type * as passPotato from "../passPotato";
@@ -33,6 +34,7 @@ import type * as recievesPotato from "../recievesPotato";
  * `ConvexReactClient` to create app-specific types.
  */
 export type ConvexAPI = ApiFromModules<{
+  addPlayer: typeof addPlayer;
   getPlayers: typeof getPlayers;
   getPotatoHolder: typeof getPotatoHolder;
   passPotato: typeof passPotato;
