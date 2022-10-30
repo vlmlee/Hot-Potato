@@ -239,7 +239,7 @@ export default function App() {
                     <br />* If there are 0 potatoes, you cannot start the automated Hot Potato.
                     <br />* Click on "Start Hot Potato" to automate the Hot Potato for 10 seconds.
                     <br />* You are welcomed to intercept the automation by adding and removing players, adding and
-                    removing potatoes, or interrupting the potato elsewhere.
+                    removing potatoes, or trying to interrupt the potato elsewhere.
                 </div>
             </div>
             <div>
