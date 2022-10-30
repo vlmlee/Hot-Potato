@@ -237,11 +237,11 @@ export default function App() {
                 <div className={'heading__logs'}>Logs</div>
                 <div className={'logs'}>
                     <div>
-                        <div className={'logs__label'}>Get Players (Collect)</div>
+                        <div className={'logs__label'}>Get Players (Get All)</div>
                         <div>{log.current.getPlayers.toFixed(5)}ms</div>
                     </div>
                     <div>
-                        <div className={'logs__label'}>Get Holder (Get)</div>
+                        <div className={'logs__label'}>Get Holder (Get One)</div>
                         <div>{log.current.getHolder.toFixed(5)}ms</div>
                     </div>
                     <div>
