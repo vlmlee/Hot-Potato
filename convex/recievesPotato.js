@@ -1,6 +1,5 @@
-import {mutation, query} from "./_generated/server";
+import { mutation } from './_generated/server';
 import { performance } from 'node:perf_hooks';
-import {s} from "convex/schema";
 
 export default mutation(async ({ db }, _id) => {
     performance.mark('receivesPotato');

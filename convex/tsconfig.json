@@ -7,10 +7,11 @@
     /* These settings are not required by Convex and can be modified. */
     "allowJs": true,
     "strict": true,
-
     /* These compiler options are required by Convex */
     "target": "ESNext",
-    "lib": ["ES2021"],
+    "lib": [
+      "ES2021"
+    ],
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "module": "ESNext",
@@ -24,5 +25,7 @@
     "./**/*",
     "../node_modules/convex/dist/esm/environment/index.d.ts"
   ],
-  "exclude": ["./_generated"]
+  "exclude": [
+    "./_generated"
+  ]
 }

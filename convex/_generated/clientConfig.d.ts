@@ -9,7 +9,7 @@
  * @module
  */
 
-import type { ClientConfiguration } from "convex/browser";
+import type { ClientConfiguration } from 'convex/browser';
 
 /**
  * The DEV Convex client configuration.
