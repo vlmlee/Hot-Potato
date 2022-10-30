@@ -214,8 +214,8 @@ export default function App() {
         const _potatoHolders = await _getHolders();
         const isAlreadyHolding = _potatoHolders.findIndex(potatoHolder => potatoHolder?.id.id === p._id.id) !== -1;
         if (_potatoHolders.length && !isAlreadyHolding) {
-            window.performance.mark('passPotato');
             const randomPotatoHolder = _potatoHolders[Math.floor(Math.random() * _potatoHolders.length)];
+            window.performance.mark('passPotato');
             await _passPotato(randomPotatoHolder, p._id);
             window.performance.measure('passPotato to Now', 'passPotato');
             await getHolders();
