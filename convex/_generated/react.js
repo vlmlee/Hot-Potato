@@ -9,7 +9,11 @@
  * @module
  */
 
-import { useConvexGeneric, useMutationGeneric, useQueryGeneric } from 'convex/react';
+import {
+  useQueryGeneric,
+  useMutationGeneric,
+  useConvexGeneric,
+} from "convex/react";
 
 /**
  * Load a reactive query within a React component.

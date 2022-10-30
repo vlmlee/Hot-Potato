@@ -9,11 +9,19 @@
  * @module
  */
 
-import type { ApiFromModules, OptimisticLocalStore as GenericOptimisticLocalStore } from 'convex/browser';
-import type { UseConvexForAPI, UseMutationForAPI, UseQueryForAPI } from 'convex/react';
-import type * as getMessage from '../getMessage';
-import type * as listMessages from '../listMessages';
-import type * as sendMessage from '../sendMessage';
+import type {
+  ApiFromModules,
+  OptimisticLocalStore as GenericOptimisticLocalStore,
+} from "convex/browser";
+import type {
+  UseQueryForAPI,
+  UseMutationForAPI,
+  UseConvexForAPI,
+} from "convex/react";
+import type * as getPlayers from "../getPlayers";
+import type * as getPotatoHolder from "../getPotatoHolder";
+import type * as passPotato from "../passPotato";
+import type * as recievesPotato from "../recievesPotato";
 
 /**
  * A type describing your app's public Convex API.
@@ -25,9 +33,10 @@ import type * as sendMessage from '../sendMessage';
  * `ConvexReactClient` to create app-specific types.
  */
 export type ConvexAPI = ApiFromModules<{
-    getMessage: typeof getMessage;
-    listMessages: typeof listMessages;
-    sendMessage: typeof sendMessage;
+  getPlayers: typeof getPlayers;
+  getPotatoHolder: typeof getPotatoHolder;
+  passPotato: typeof passPotato;
+  recievesPotato: typeof recievesPotato;
 }>;
 
 /**

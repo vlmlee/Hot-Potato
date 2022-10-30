@@ -26,6 +26,6 @@
  * ```
  */
 const clientConfig = {
-    address: 'http://localhost:8187'
+  address: "http://localhost:8187",
 };
 export default clientConfig;

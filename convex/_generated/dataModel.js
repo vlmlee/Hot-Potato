@@ -9,7 +9,7 @@
  * @module
  */
 
-import { GenericId } from 'convex/values';
+import { GenericId } from "convex/values";
 
 /**
  * An identifier for a document in Convex.

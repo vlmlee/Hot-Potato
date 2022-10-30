@@ -1,7 +1,7 @@
 import { defineSchema, defineTable, s } from 'convex/schema';
 
 export default defineSchema({
-    player: defineTable({
+    players: defineTable({
         hasPotato: s.boolean(),
         timestamp: s.number(),
         numOfTimeHeldPotato: s.number(),

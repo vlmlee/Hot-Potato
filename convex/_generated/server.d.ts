@@ -10,14 +10,14 @@
  */
 
 import {
-    DatabaseReader as GenericDatabaseReader,
-    DatabaseWriter as GenericDatabaseWriter,
-    MutationBuilderForDataModel,
-    MutationCtx as GenericMutationCtx,
-    QueryBuilderForDataModel,
-    QueryCtx as GenericQueryCtx
-} from 'convex/server';
-import { DataModel } from './dataModel.js';
+  MutationBuilderForDataModel,
+  QueryBuilderForDataModel,
+  QueryCtx as GenericQueryCtx,
+  MutationCtx as GenericMutationCtx,
+  DatabaseReader as GenericDatabaseReader,
+  DatabaseWriter as GenericDatabaseWriter,
+} from "convex/server";
+import { DataModel } from "./dataModel.js";
 
 /**
  * Define a query in this Convex app's public API.

@@ -9,7 +9,7 @@
  * @module
  */
 
-import { mutationGeneric, queryGeneric } from 'convex/server';
+import { queryGeneric, mutationGeneric } from "convex/server";
 
 /**
  * Define a query in this Convex app's public API.
