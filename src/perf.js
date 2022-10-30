@@ -1,4 +1,3 @@
-import { performance, PerformanceObserver } from 'node:perf_hooks';
 import { useState } from 'react';
 
 function usePerfHook() {
@@ -15,10 +14,10 @@ function usePerfHook() {
                 }
             ];
         });
-        performance.clearMarks();
+        window.performance.clearMarks();
     });
     obs.observe({ type: 'measure' });
-    performance.measure('Start to Now');
+    window.performance.measure('Start to Now');
 
     return log;
 }
