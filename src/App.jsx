@@ -30,7 +30,14 @@ export default function App() {
                 >Player {p.id}</div>))}
             </div>
             <div>
-                {perfLogs}
+                {perfLogs.map(p => (<div>
+                    <div>
+                        {p.name}
+                    </div>
+                    <div>
+                        {p.duration}
+                    </div>
+                </div>))}
             </div>
         </main>
     );
