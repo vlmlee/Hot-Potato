@@ -7,6 +7,7 @@ export default mutation(async ({ db }, _id) => {
         numOfTimeHeldPotato: 1,
         totalTimeHeld: 0
     };
+
     await db.replace(_id, player);
 
     const holder = {

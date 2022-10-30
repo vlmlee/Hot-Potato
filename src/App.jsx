@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useMutation, useQuery } from '../convex/_generated/react';
+import { useMutation } from '../convex/_generated/react';
+import receivesPotato from '../convex/receivesPotato';
 
 export default function App() {
     const log = useRef({
@@ -80,6 +81,12 @@ export default function App() {
         });
         obs.observe({ type: 'measure' });
 
+        async function _initPlayers() {
+            await getPlayers();
+        }
+
+        _initPlayers();
+
         return () => {
             obs.disconnect();
         };
@@ -91,17 +98,25 @@ export default function App() {
     const [potatoCount, setPotatoCount] = useState(1);
     const _addPlayer = useMutation('addPlayer');
 
-    const userReceivesPotato = useMutation('receivesPotato');
+    const _userReceivesPotato = useMutation('receivesPotato');
     const _getPlayers = useMutation('getPlayers');
     const _getHolder = useMutation('getPotatoHolder');
     const _passPotato = useMutation('passPotato');
     const _removePlayer = useMutation('removePlayer');
 
     const startHotPotato = async () => {
-        if (players.length) {
-            const randomPlayer = players[Math.floor(Math.random() * players.length)];
-            await userReceivesPotato(randomPlayer._id);
-            await getHolder();
+        let time = performance.now();
+
+        while (performance.now() - time < 10000) {
+            if (players.length) {
+                const randomPlayer = players[Math.floor(Math.random() * players.length)];
+                if (!potatoHolder) {
+                    await _userReceivesPotato(randomPlayer._id);
+                    await getHolder();
+                } else if (potatoHolder?.id.id !== randomPlayer._id.id) {
+                    await passPotato(randomPlayer);
+                }
+            }
         }
     };
 
@@ -109,15 +124,17 @@ export default function App() {
         window.performance.mark('getPlayers');
         const _players = await _getPlayers();
         window.performance.measure('getPlayers to Now', 'getPlayers');
-        setPlayers(_players);
+        setPlayers(_ => _players);
+        if (!potatoHolder) {
+            await getHolder();
+        }
     };
 
     const getHolder = async e => {
         window.performance.mark('getHolder');
         const _potatoHolder = await _getHolder();
         window.performance.measure('getHolder to Now', 'getHolder');
-        setPotatoHolder(_potatoHolder);
-        await getPlayers(e);
+        setPotatoHolder(_ => _potatoHolder);
     };
 
     const addPotato = async e => {
@@ -139,23 +156,23 @@ export default function App() {
         window.performance.mark('addPlayer');
         await _addPlayer();
         window.performance.measure('addPlayer to Now', 'addPlayer');
-        await getPlayers(e);
+        await getPlayers();
     };
 
-    const passPotato = async (e, p) => {
+    const removePlayer = async p => {
+        window.performance.mark('removePlayer');
+        await _removePlayer(p._id);
+        window.performance.measure('removePlayer to Now', 'removePlayer');
+        await getPlayers();
+    };
+
+    const passPotato = async p => {
         if (potatoHolder && potatoHolder?.id.id !== p._id.id) {
             window.performance.mark('passPotato');
             _passPotato(potatoHolder, p._id);
             window.performance.measure('passPotato to Now', 'passPotato');
-            await getHolder(e);
+            await getHolder();
         }
-    };
-
-    const removePlayer = async (e, p) => {
-        window.performance.mark('removePlayer');
-        await _removePlayer(p._id);
-        window.performance.measure('removePlayer to Now', 'removePlayer');
-        await getPlayers(e);
     };
 
     return (
@@ -170,7 +187,7 @@ export default function App() {
                     <br />* Add a player by clicking the "Add Player" button.
                     <br />* Add another hot potato by clicking the "Add Potato" button.
                     <br />* Remove a hot potato by clicking the "Remove Potato" button.
-                    <br />* Click on "Start Hot Potato" to automate the Hot Potato.
+                    <br />* Click on "Start Hot Potato" to automate the Hot Potato for 10 seconds.
                 </div>
             </div>
             <div>
@@ -181,11 +198,11 @@ export default function App() {
                             key={`${p._id.id}`}
                             onContextMenu={e => {
                                 e.preventDefault();
-                                removePlayer(e, p);
+                                removePlayer(p);
                             }}
                             onClick={e => {
                                 e.preventDefault();
-                                passPotato(e, p);
+                                passPotato(p);
                             }}
                             className={'player ' + (potatoHolder?.id.id === p._id.id ? 'potato-holder' : '')}>
                             Player {i + 1}
