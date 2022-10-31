@@ -169,11 +169,12 @@ export default function App() {
 
     const addPotato = async e => {
         e.preventDefault();
-        if (potatoCount < players.length / 2 - 1) {
+        const _players = await _getPlayers();
+        if (potatoCount < _players.length / 2 - 1) {
             setPotatoCount(prev => prev + 1);
             let i = 0;
             while (i < 1) {
-                const randomPlayer = players[Math.floor(Math.random() * players.length)];
+                const randomPlayer = _players[Math.floor(Math.random() * _players.length)];
                 if (potatoHolders.findIndex(potatoHolder => potatoHolder?.id.id === randomPlayer._id.id) === -1) {
                     await _receivesPotato(randomPlayer._id);
                     await getPlayers();
