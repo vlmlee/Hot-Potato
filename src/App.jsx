@@ -183,7 +183,8 @@ export default function App() {
 
     const removePotato = async e => {
         e.preventDefault();
-        if (potatoCount > 1 && potatoCount <= players.length) {
+        const _players = await _getPlayers();
+        if (potatoCount > 1 && potatoCount <= _players.length) {
             setPotatoCount(prev => prev - 1);
             const _potatoHolders = await _getHolders();
             const randomPotatoHolder = _potatoHolders[Math.floor(Math.random() * _potatoHolders.length)];
