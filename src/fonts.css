@@ -1,9 +1,28 @@
 @font-face {
-    font-family: 'CaskaydiaCove Nerd Font Mono';
-    src: url('./Caskaydia Cove Nerd Font Complete Mono Regular.otf') format('otf');
+    font-family: 'Caskaydia Cove';
+    src: url('CaskaydiaCove-Regular.eot');
+    src: local('Caskaydia Cove Regular'), local('CaskaydiaCove-Regular'),
+        url('CaskaydiaCove-Regular.eot?#iefix') format('embedded-opentype'),
+        url('CaskaydiaCove-Regular.woff2') format('woff2'),
+        url('CaskaydiaCove-Regular.woff') format('woff'),
+        url('CaskaydiaCove-Regular.ttf') format('truetype'),
+        url('CaskaydiaCove-Regular.svg#CaskaydiaCove-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: 'CaskaydiaCove Nerd Font';
-    src: url('./CaskaydiaCove-Regular.ttf') format('ttf');
+    font-family: 'CaskaydiaCove Nerd Font Mono';
+    src: url('CaskaydiaCoveNerdFontCompleteM-Regular.eot');
+    src: local('Caskaydia Cove Nerd Font Complete Mono Regular'), local('CaskaydiaCoveNerdFontCompleteM-Regular'),
+        url('CaskaydiaCoveNerdFontCompleteM-Regular.eot?#iefix') format('embedded-opentype'),
+        url('CaskaydiaCoveNerdFontCompleteM-Regular.woff2') format('woff2'),
+        url('CaskaydiaCoveNerdFontCompleteM-Regular.woff') format('woff'),
+        url('CaskaydiaCoveNerdFontCompleteM-Regular.ttf') format('truetype'),
+        url('CaskaydiaCoveNerdFontCompleteM-Regular.svg#CaskaydiaCoveNerdFontCompleteM-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
+
