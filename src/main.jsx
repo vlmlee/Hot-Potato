@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { ConvexProvider, ConvexReactClient } from 'convex/react';
-import './index.css';
+import './styles/index.css';
 import App from './App';
 import clientConfig from '../convex/_generated/clientConfig';
 
