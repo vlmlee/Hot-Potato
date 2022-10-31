@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '../convex/_generated/react';
-import receivesPotato from '../convex/receivesPotato';
 
 export default function App() {
     const log = useRef({
