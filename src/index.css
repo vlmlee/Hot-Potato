@@ -8,7 +8,7 @@
 
 @font-face {
     font-family: 'CaskaydiaCove Nerd Font';
-    src: url('./CaskaydiaCove-Regular.ttf') format('otf');
+    src: url('./CaskaydiaCove-Regular.ttf') format('ttf');
 }/* reset */
 
 * {
