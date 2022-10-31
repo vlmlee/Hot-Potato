@@ -11,8 +11,6 @@ export default function App() {
         removePlayer: 0
     });
 
-    let init = false;
-
     useEffect(() => {
         const obs = new PerformanceObserver(items => {
             const _getPlayersEntries = items.getEntriesByName('getPlayers to Now');
@@ -28,7 +26,7 @@ export default function App() {
             let averageRemovePlayer;
 
             if (_getPlayersEntries.length) {
-                averageGetPlayers = init
+                averageGetPlayers = log.current.getPlayers
                     ? 0.5 *
                       (log.current.getPlayers +
                           _getPlayersEntries.reduce((acc, cur) => {
@@ -41,7 +39,7 @@ export default function App() {
             }
 
             if (_getHoldersEntries.length) {
-                averageGetHolders = init
+                averageGetHolders = log.current.getHolder
                     ? 0.5 *
                       (log.current.getHolder +
                           _getHoldersEntries.reduce((acc, cur) => acc + cur.duration, 0) / _getHoldersEntries.length)
@@ -50,7 +48,7 @@ export default function App() {
             }
 
             if (_passPotatoEntries.length) {
-                averagePassPotato = init
+                averagePassPotato = log.current.passPotato
                     ? 0.5 *
                       (log.current.passPotato +
                           _passPotatoEntries.reduce((acc, cur) => acc + cur.duration, 0) / _passPotatoEntries.length)
@@ -59,7 +57,7 @@ export default function App() {
             }
 
             if (_addPlayerEntries.length) {
-                averageAddPlayer = init
+                averageAddPlayer = log.current.addPlayer
                     ? 0.5 *
                       (log.current.addPlayer +
                           _addPlayerEntries.reduce((acc, cur) => acc + cur.duration, 0) / _addPlayerEntries.length)
@@ -68,7 +66,7 @@ export default function App() {
             }
 
             if (_removePlayerEntries.length) {
-                averageRemovePlayer = init
+                averageRemovePlayer = log.current.removePlayer
                     ? 0.5 *
                       (log.current.removePlayer +
                           _removePlayerEntries.reduce((acc, cur) => acc + cur.duration, 0) /
@@ -76,8 +74,6 @@ export default function App() {
                     : _removePlayerEntries.reduce((acc, cur) => acc + cur.duration, 0) / _removePlayerEntries.length;
                 log.current.removePlayer = averageRemovePlayer;
             }
-
-            init = true;
         });
         obs.observe({ type: 'measure' });
 
