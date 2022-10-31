@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'CaskaydiaCove Nerd Font Mono';
+    src: url('./Caskaydia Cove Nerd Font Complete Mono Regular.otf') format('otf');
+}
+
+@font-face {
+    font-family: 'CaskaydiaCove Nerd Font';
+    src: url('./CaskaydiaCove-Regular.ttf') format('ttf');
+}

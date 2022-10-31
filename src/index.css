@@ -1,15 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
-
-@font-face {
-    font-family: 'CaskaydiaCove Nerd Font Mono';
-    src: url('public/Caskaydia Cove Nerd Font Complete Mono Regular.otf') format('otf');
-}/* reset */
-
-@font-face {
-    font-family: 'CaskaydiaCove Nerd Font';
-    src: url('public/CaskaydiaCove-Regular.ttf') format('ttf');
-}/* reset */
+@import "fonts.css";
 
 * {
     margin: 0;
